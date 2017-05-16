@@ -1,2 +1,2 @@
-# Repo for Empower Project.
-This project is only for Samsung Tablet devices.
+# Starter Code.
+Project starting point
