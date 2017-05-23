@@ -22,7 +22,6 @@ import io.iamBedant.starter.injection.module.ActivityModule;
 import io.iamBedant.starter.utils.CommonUtils;
 import io.iamBedant.starter.utils.NetworkUtils;
 import butterknife.Unbinder;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by @iamBedant on 15/03/17.
@@ -52,7 +51,6 @@ public abstract class BaseActivity extends AppCompatActivity
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @TargetApi(Build.VERSION_CODES.M)

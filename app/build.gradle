@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 //apply from: '../config/quality/quality.gradle'
 
 android {
@@ -13,47 +14,53 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
-
-    signingConfigs {
-
-        debug {
-            keyAlias 'debug'
-            keyPassword 'kuliza123'
-            storeFile file('/Users/kuliza-300/Documents/android_projects/iris/fork/iris/app/debugKeystore.jks')
-            storePassword 'kuliza123'
-        }
-        release {
-            keyAlias 'release'
-            keyPassword 'kuliza123'
-            storeFile file('/Users/kuliza-300/Documents/android_projects/iris/fork/iris/app/releaseKeystore.jks')
-            storePassword 'kuliza123'
-        }
+    dataBinding {
+        enabled = true
     }
 
+    flavorDimensions "mode"
     productFlavors {
-        dev {
-            signingConfig signingConfigs.debug
-            applicationId "io.iamBedant.starter.dev"
+        uat {
+            it.buildConfigField 'String', 'BASE_URL', BaseUrlUat
+            it.buildConfigField 'String', 'PASSWORD', passwordUat
+            dimension "mode"
         }
-
         prod {
-            signingConfig signingConfigs.release
-            applicationId "io.iamBedant.starter"
+            it.buildConfigField 'String', 'BASE_URL', BaseUrlProd
+            it.buildConfigField 'String', 'PASSWORD', passwordProd
+            dimension "mode"
         }
     }
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://www.mocky.io/v2\"")
-            buildConfigField("String", "API_KEY", "\"ABCXYZ123TEST\"")
-            signingConfig signingConfigs.debug
+
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "BASE_URL", "\"http://www.mocky.io/v2\"")
-            buildConfigField("String", "API_KEY", "\"ABCXYZ123TEST\"")
-            signingConfig signingConfigs.release
+
+        }
+    }
+    splits {
+
+        // Configures multiple APKs based on ABI.
+        abi {
+
+            // Enables building multiple APKs per ABI.
+            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for x86, armeabi-v7a, and mips.
+
+            // Resets the list of ABIs that Gradle should create APKs for to none.
+            reset()
+
+            // Specifies a list of ABIs that Gradle should create APKs for.
+            include "x86", "armeabi-v7a", "mips"
+
+            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
+            universalApk false
         }
     }
 }
@@ -70,9 +77,6 @@ dependencies {
     compile "com.android.support:support-vector-drawable:$rootProject.supportLibraryVersion"
     compile "com.android.support:animated-vector-drawable:$rootProject.supportLibraryVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.constraintVersion"
-
-    // font
-    compile "uk.co.chrisjenx:calligraphy:$rootProject.calligraphyVersion"
 
     // network
     compile "com.amitshekhar.android:rx2-android-networking:$rootProject.rx2AndroidNetworking"
@@ -117,5 +121,9 @@ dependencies {
     }
     androidTestCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
     androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
+}
+repositories {
+    mavenCentral()
 }

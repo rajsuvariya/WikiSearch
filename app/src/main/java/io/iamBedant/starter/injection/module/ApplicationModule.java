@@ -17,7 +17,6 @@ import io.iamBedant.starter.utils.AppConstants;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by @iamBedant on 15/03/17.
@@ -82,11 +81,5 @@ public class ApplicationModule {
             "");
     }
 
-    @Provides
-    @Singleton CalligraphyConfig provideCalligraphyDefaultConfig() {
-        return new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/source-sans-pro/SourceSansPro-Regular.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build();
-    }
+
 }

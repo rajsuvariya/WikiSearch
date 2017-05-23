@@ -9,7 +9,6 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import javax.inject.Inject;
 import timber.log.Timber;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by @iamBedant on 15/03/17.
@@ -18,7 +17,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class IfaApp extends Application {
   @Inject DataManager mDataManager;
 
-  @Inject CalligraphyConfig mCalligraphyConfig;
 
   private ApplicationComponent mApplicationComponent;
 
@@ -39,8 +37,6 @@ public class IfaApp extends Application {
     if (BuildConfig.DEBUG) {
       AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
     }
-
-    CalligraphyConfig.initDefault(mCalligraphyConfig);
   }
 
   public ApplicationComponent getComponent() {
