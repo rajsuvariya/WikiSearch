@@ -49,9 +49,6 @@ public abstract class BaseActivity extends AppCompatActivity
         return mActivityComponent;
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-    }
 
     @TargetApi(Build.VERSION_CODES.M)
     public void requestPermissionsSafely(String[] permissions, int requestCode) {

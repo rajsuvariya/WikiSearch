@@ -51,7 +51,7 @@ public class ApplicationModule {
     @Provides
     @ApiInfo
     String provideApiKey() {
-        return BuildConfig.API_KEY;
+        return BuildConfig.PASSWORD;
     }
 
     @Provides
