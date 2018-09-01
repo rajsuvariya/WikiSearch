@@ -1,0 +1,15 @@
+package io.rajsuvariya.wikisearch.data.remote;
+
+import io.rajsuvariya.wikisearch.data.remote.model.searchApi.WikiSearchOutputModel;
+import io.reactivex.Observable;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+
+/**
+ * Created by @raj on 31/08/18.
+ */
+public interface ApiEndpoints {
+
+    @GET("?action=query&format=json&prop=pageimages%7Cpageterms&generator=prefixsearch&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=50&pilimit=10&wbptterms=description&gpslimit=10")
+    Observable<WikiSearchOutputModel> wikiSearch(@Query("gpssearch") String queryParam);
+}

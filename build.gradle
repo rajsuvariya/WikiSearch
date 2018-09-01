@@ -1,14 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.1.2-4'
     repositories {
         maven { url 'https://maven.google.com' }
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:3.1.4'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -28,12 +27,12 @@ task clean(type: Delete) {
 ext {
     // Sdk and tools
     minSdkVersion = 16
-    targetSdkVersion = 25
-    compileSdkVersion = 'android-O'
-    buildToolsVersion = '26.0.0 rc2'
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.3'
 
     // App dependencies
-    supportLibraryVersion = '26.+'
+    supportLibraryVersion = '27.1.1'
     gsonVersion = '2.8.0'
     calligraphyVersion = '2.2.0'
 
@@ -41,13 +40,13 @@ ext {
 
     dagger2Version = '2.8'
     rxjava2Version = '2.0.6'
-    rxandroidVersion = '2.0.1'
-    butterKnifeVersion = '8.5.1'
+    rxandroidVersion = '2.0.2'
+    butterKnifeVersion = '8.8.1'
     greenDaoVersion = '3.2.0'
     placeholderviewVersion = '0.6.1'
     debugDBVersion = '1.0.0'
-    timberVersion = '4.5.1'
-    constraintVersion = '1.0.0-beta4'
+    timberVersion = '4.6.1'
+    constraintVersion = '2.0.0-alpha2'
     glideVersion ='3.7.0'
     v4Support ='19.1.0'
     javaxInject ='1'

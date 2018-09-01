@@ -9,4 +9,5 @@
     <string name="connection_error">Internet connection lost!</string>
     <string name="empty_pan">Please Enter your PAN No</string>
     <string name="invalid_pan">Please enter a valid PAN No</string>
+    <string name="search">Search</string>
 </resources>
