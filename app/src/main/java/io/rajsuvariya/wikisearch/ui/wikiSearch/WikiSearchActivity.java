@@ -11,6 +11,8 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -23,13 +25,15 @@ import butterknife.ButterKnife;
 import io.rajsuvariya.wikisearch.R;
 import io.rajsuvariya.wikisearch.data.remote.model.searchApi.Page;
 import io.rajsuvariya.wikisearch.ui.base.BaseActivity;
+import io.rajsuvariya.wikisearch.ui.wikiDetails.WikiDetailsActivity;
+import io.rajsuvariya.wikisearch.utils.AppConstants;
 import io.rajsuvariya.wikisearch.utils.CommonUtils;
 
 /**
  * Created by @rajsuvariya on 15/03/17.
  */
 
-public class WikiSearchActivity extends BaseActivity implements WikiSearchMvpView {
+public class WikiSearchActivity extends BaseActivity implements WikiSearchMvpView, SearchResultAdapter.ClickListener {
 
     @Inject
     WikiSearchMvpPresenter<WikiSearchMvpView> mPresenter;
@@ -39,6 +43,9 @@ public class WikiSearchActivity extends BaseActivity implements WikiSearchMvpVie
 
     @BindView(R.id.rv_search_result)
     RecyclerView rvSearchResult;
+
+    @BindView(R.id.pb_loading_indicator)
+    ProgressBar pbLoadingIndicator;
 
     private SearchResultAdapter searchResultAdapter;
 
@@ -55,21 +62,30 @@ public class WikiSearchActivity extends BaseActivity implements WikiSearchMvpVie
         setUnBinder(ButterKnife.bind(this));
         mPresenter.onAttach(WikiSearchActivity.this);
 
-        setUpSearchLabelTv();
+        setUpSearchLabel();
 
-        searchResultAdapter = new SearchResultAdapter();
+        searchResultAdapter = new SearchResultAdapter(this);
         rvSearchResult.setAdapter(searchResultAdapter);
         rvSearchResult.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void setUpSearchLabelTv() {
-        String searchLabel = "Please press search icon to get started";
-        SpannableString ss = new SpannableString(searchLabel);
-        Drawable d = ContextCompat.getDrawable(this, R.drawable.ic_search_black_24dp);
-        d.setBounds(0, 0, (int) CommonUtils.convertDpToPixel(20, this), (int) CommonUtils.convertDpToPixel(20, this));
-        ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);
-        ss.setSpan(span, searchLabel.indexOf("search"), searchLabel.indexOf("search")+6, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        tvSearchLabel.setText(ss);
+    @Override
+    public void setUpSearchLabel() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rvSearchResult.setVisibility(View.GONE);
+                tvSearchLabel.setVisibility(View.VISIBLE);
+                pbLoadingIndicator.setVisibility(View.GONE);
+                String searchLabel = getString(R.string.search_label_hint);
+                SpannableString ss = new SpannableString(searchLabel);
+                Drawable d = ContextCompat.getDrawable(WikiSearchActivity.this, R.drawable.ic_search_black_24dp);
+                d.setBounds(0, 0, (int) CommonUtils.convertDpToPixel(20, WikiSearchActivity.this), (int) CommonUtils.convertDpToPixel(20, WikiSearchActivity.this));
+                ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);
+                ss.setSpan(span, searchLabel.indexOf("search"), searchLabel.indexOf("search")+6, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                tvSearchLabel.setText(ss);
+            }
+        });
     }
 
     @Override
@@ -81,7 +97,23 @@ public class WikiSearchActivity extends BaseActivity implements WikiSearchMvpVie
 
     @Override
     public void showSearchResults(ArrayList<Page> pages) {
+        rvSearchResult.setVisibility(View.VISIBLE);
+        tvSearchLabel.setVisibility(View.GONE);
         searchResultAdapter.swapData(pages);
+    }
+
+    @Override
+    public void showNoResultAvailable() {
+        rvSearchResult.setVisibility(View.GONE);
+        tvSearchLabel.setVisibility(View.VISIBLE);
+        tvSearchLabel.setText(R.string.no_result_error);
+    }
+
+    @Override
+    public void onClick(Page page) {
+        Intent intent = new Intent(this, WikiDetailsActivity.class);
+        intent.putExtra(AppConstants.PAGE_TITLE, page.getTitle());
+        startActivity(intent);
     }
 
     @Override
@@ -94,8 +126,31 @@ public class WikiSearchActivity extends BaseActivity implements WikiSearchMvpVie
     public boolean onPrepareOptionsMenu(Menu menu) {
         SearchView searchView = (SearchView) menu.getItem(0).getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);//set search menu as full width
-        mPresenter.onSearchTextChanged(RxSearchObservable.fromView(searchView));
+        searchView.setQueryHint(getString(R.string.search_hint));
+        mPresenter.onSearchTextChanged(RxSearchObservable.fromView(searchView), getString(R.string.network_error));
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void showLoading() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pbLoadingIndicator.setVisibility(View.VISIBLE);
+                rvSearchResult.setVisibility(View.GONE);
+                tvSearchLabel.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    @Override
+    public void hideLoading() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pbLoadingIndicator.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -104,8 +159,4 @@ public class WikiSearchActivity extends BaseActivity implements WikiSearchMvpVie
         super.onDestroy();
     }
 
-    @Override
-    protected void setUp() {
-
-    }
 }

@@ -90,6 +90,13 @@ public abstract class BaseFragment extends Fragment implements MvpView {
         }
     }
 
+    @Override
+    public void showToast(String toast) {
+        if (mActivity != null) {
+            mActivity.showToast(toast);
+        }
+    }
+
     public ActivityComponent getActivityComponent() {
         return mActivity.getActivityComponent();
     }

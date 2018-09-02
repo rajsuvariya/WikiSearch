@@ -27,4 +27,5 @@ public interface MvpView {
 
     void hideKeyboard();
 
+    void showToast(String toast);
 }

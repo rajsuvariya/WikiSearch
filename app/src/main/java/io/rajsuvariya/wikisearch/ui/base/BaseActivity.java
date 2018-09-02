@@ -13,8 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import io.rajsuvariya.wikisearch.IfaApp;
+import io.rajsuvariya.wikisearch.WikiSearchApp;
 import io.rajsuvariya.wikisearch.R;
 import io.rajsuvariya.wikisearch.injection.component.ActivityComponent;
 import io.rajsuvariya.wikisearch.injection.component.DaggerActivityComponent;
@@ -41,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         mActivityComponent = DaggerActivityComponent.builder()
                 .activityModule(new ActivityModule(this))
-                .applicationComponent(((IfaApp) getApplication()).getComponent())
+                .applicationComponent(((WikiSearchApp) getApplication()).getComponent())
                 .build();
     }
 
@@ -115,6 +116,11 @@ public abstract class BaseActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void showToast(String toast) {
+        Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
+    }
+
     public void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -142,5 +148,4 @@ public abstract class BaseActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    protected abstract void setUp();
 }

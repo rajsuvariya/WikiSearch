@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Page implements Parcelable
 {
 
@@ -103,6 +105,33 @@ public class Page implements Parcelable
 
     public void setTerms(Terms terms) {
         this.terms = terms;
+    }
+
+    public String getImageUrl() {
+        if (getThumbnail()!=null && getThumbnail().getSource()!=null) {
+            return getThumbnail().getSource();
+        }
+        return "";
+    }
+
+
+    public String getDescription() {
+        if (this.getTerms()!=null) {
+            List<String> descriptions = getTerms().getDescription();
+            if (descriptions.size() > 0) {
+                StringBuilder descriptionBuilder  = new StringBuilder();
+                for (int i = 0; i < descriptions.size(); i++) {
+                    descriptionBuilder.append(descriptions.get(i));
+                    if (i != descriptions.size() - 1)
+                        descriptionBuilder.append(", ");
+                }
+                return descriptionBuilder.toString();
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
     }
 
     public void writeToParcel(Parcel dest, int flags) {

@@ -10,8 +10,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.rajsuvariya.wikisearch.BuildConfig;
+import io.rajsuvariya.wikisearch.data.remote.model.detailsApi.WikiDetailsOutputModel;
 import io.rajsuvariya.wikisearch.data.remote.model.searchApi.WikiSearchOutputModel;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -28,6 +31,7 @@ public class AppApiHelper implements ApiHelper {
     private Long TIMEOUT = (long) (3 * 60);
     private Retrofit mRetrofit;
     private ApiEndpoints mApiServiceEndPoints;
+
 
     @Inject
     public AppApiHelper() {
@@ -64,6 +68,10 @@ public class AppApiHelper implements ApiHelper {
 
     public Observable<WikiSearchOutputModel> callWikiApi(String queryParam) {
         return getApiService().wikiSearch(queryParam);
+    }
+
+    public Maybe<WikiDetailsOutputModel> fetchDetailsByTitle(String title) {
+        return getApiService().fetchDetailsByTitle(title);
     }
 }
 

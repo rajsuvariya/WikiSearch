@@ -31,11 +31,6 @@ public class SplashActivity extends BaseActivity implements SplashMvpView{
     }
 
     @Override
-    protected void setUp() {
-
-    }
-
-    @Override
     public void openLoginActivity() {
 
     }

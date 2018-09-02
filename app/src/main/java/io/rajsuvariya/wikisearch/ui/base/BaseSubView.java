@@ -87,6 +87,13 @@ public abstract class BaseSubView extends ViewGroup implements SubMvpView {
         }
     }
 
+    @Override
+    public void showToast(String toast) {
+        if (mParentMvpView != null) {
+            mParentMvpView.showToast(toast);
+        }
+    }
+
     protected abstract void bindViewsAndSetOnClickListeners();
 
     protected abstract void setUp();

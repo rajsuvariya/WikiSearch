@@ -21,7 +21,11 @@ public final class AppConstants {
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMdd_HHmmss";
 
+    public static final String PAGE_TITLE = "_Page_Title";
+    public static final String PAGE_ID = "_Page_Id";
+
     private AppConstants() {
+        throw new RuntimeException("Not allowed to initialize");
         // This utility class is not publicly instantiable
     }
 }

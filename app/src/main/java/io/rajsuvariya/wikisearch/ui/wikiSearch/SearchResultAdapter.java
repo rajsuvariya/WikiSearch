@@ -25,9 +25,11 @@ import io.rajsuvariya.wikisearch.data.remote.model.searchApi.Page;
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder> {
 
     private ArrayList<Page> mPageList;
+    private ClickListener mListener;
 
-    public SearchResultAdapter() {
+    public SearchResultAdapter(ClickListener listener) {
         this.mPageList = new ArrayList<>();
+        this.mListener = listener;
     }
 
     @NonNull
@@ -38,24 +40,22 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchResultViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchResultViewHolder holder, final int position) {
         Glide.with(holder.itemView.getContext())
-                .load(mPageList.get(position).getThumbnail().getSource())
+                .load(mPageList.get(position).getImageUrl())
                 .placeholder(holder.itemView.getContext().getResources().getDrawable(R.drawable.ic_image_not_available))
                 .into(holder.ivResultImage);
 
         holder.tvResultTitle.setText(mPageList.get(position).getTitle());
 
-        List<String> descriptions = mPageList.get(position).getTerms().getDescription();
-        if (descriptions.size() > 0) {
-            StringBuilder descriptionBuilder = new StringBuilder();
-            for (int i = 0; i < descriptions.size(); i++) {
-                descriptionBuilder.append(descriptions.get(i));
-                if (i != descriptions.size() - 1)
-                    descriptionBuilder.append(", ");
+        holder.tvResultDescription.setText(mPageList.get(position).getDescription());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onClick(mPageList.get(position));
             }
-            holder.tvResultDescription.setText(descriptionBuilder);
-        }
+        });
     }
 
     @Override
@@ -83,5 +83,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    interface ClickListener {
+        void onClick(Page page);
     }
 }

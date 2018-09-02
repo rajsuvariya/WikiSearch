@@ -4,6 +4,7 @@ package io.rajsuvariya.wikisearch.injection.component;
 import io.rajsuvariya.wikisearch.injection.PerActivity;
 import io.rajsuvariya.wikisearch.injection.module.ActivityModule;
 import io.rajsuvariya.wikisearch.ui.splash.SplashActivity;
+import io.rajsuvariya.wikisearch.ui.wikiDetails.WikiDetailsActivity;
 import io.rajsuvariya.wikisearch.ui.wikiSearch.WikiSearchActivity;
 import dagger.Component;
 
@@ -17,5 +18,5 @@ public interface ActivityComponent {
 
     void inject(SplashActivity splashActivity);
     void inject(WikiSearchActivity loginActivity);
-
+    void inject(WikiDetailsActivity wikiDetailsActivity);
 }

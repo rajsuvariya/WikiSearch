@@ -63,6 +63,7 @@ android {
 
 dependencies {
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // android support libraries
@@ -85,9 +86,11 @@ dependencies {
     compile "com.google.dagger:dagger:$rootProject.dagger2Version"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
 
-    // reactive
+    // RxJava
     compile "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+    compile "javax.inject:javax.inject:$rootProject.javaxInject"
+    provided "javax.annotation:jsr250-api:$rootProject.javaxAnnotation"
 
     // code generator for view
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
@@ -100,14 +103,15 @@ dependencies {
     compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     compile "com.android.support:support-v4:$rootProject.v4Support"
 
-    //
-    compile "javax.inject:javax.inject:$rootProject.javaxInject"
-    provided "javax.annotation:jsr250-api:$rootProject.javaxAnnotation"
-
     // dependencies for local unit tests
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
     testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+
+    // Architecture Component
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
 
     // UI Testing
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
@@ -119,6 +123,12 @@ dependencies {
     androidTestCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
     androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
 
+    // Database Debugging
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
+
+    // Custom Tab
+    implementation 'com.android.support:customtabs:27.1.1'
+    implementation 'saschpe.android:customtabs:1.1.1'
 }
 repositories {
     mavenCentral()

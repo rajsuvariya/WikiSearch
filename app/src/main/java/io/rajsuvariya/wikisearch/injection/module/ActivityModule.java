@@ -10,6 +10,9 @@ import io.rajsuvariya.wikisearch.injection.PerActivity;
 import io.rajsuvariya.wikisearch.ui.splash.SplashMvpPresenter;
 import io.rajsuvariya.wikisearch.ui.splash.SplashMvpView;
 import io.rajsuvariya.wikisearch.ui.splash.SplashPresenter;
+import io.rajsuvariya.wikisearch.ui.wikiDetails.WikiDetailsMvpPresenter;
+import io.rajsuvariya.wikisearch.ui.wikiDetails.WikiDetailsMvpView;
+import io.rajsuvariya.wikisearch.ui.wikiDetails.WikiDetailsPresenter;
 import io.rajsuvariya.wikisearch.ui.wikiSearch.WikiSearchMvpPresenter;
 import io.rajsuvariya.wikisearch.ui.wikiSearch.WikiSearchMvpView;
 import io.rajsuvariya.wikisearch.ui.wikiSearch.WikiSearchPresenter;
@@ -53,6 +56,12 @@ public class ActivityModule {
     @Provides
     @PerActivity
     WikiSearchMvpPresenter<WikiSearchMvpView> provideWikiSearchPresenter(WikiSearchPresenter<WikiSearchMvpView> presenter) {
+        return presenter;
+    }
+
+    @Provides
+    @PerActivity
+    WikiDetailsMvpPresenter<WikiDetailsMvpView> provideWikiDetailsPresenter(WikiDetailsPresenter<WikiDetailsMvpView> presenter) {
         return presenter;
     }
 }

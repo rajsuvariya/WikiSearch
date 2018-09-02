@@ -10,4 +10,10 @@
     <string name="empty_pan">Please Enter your PAN No</string>
     <string name="invalid_pan">Please enter a valid PAN No</string>
     <string name="search">Search</string>
+    <string name="search_hint">Enter text to search</string>
+    <string name="search_label_hint">Please press search icon to get started</string>
+    <string name="no_result_error">Sorry! No result found for the text entered</string>
+    <string name="link_label">To view full profile click here</string>
+    <string name="link_clickable_part">here</string>
+    <string name="network_error">Network not available</string>
 </resources>

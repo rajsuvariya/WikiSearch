@@ -7,7 +7,7 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.rajsuvariya.wikisearch.IfaApp;
+import io.rajsuvariya.wikisearch.WikiSearchApp;
 import io.rajsuvariya.wikisearch.data.DataManager;
 import io.rajsuvariya.wikisearch.injection.ApplicationContext;
 import io.rajsuvariya.wikisearch.injection.module.ApplicationModule;
@@ -20,7 +20,7 @@ import io.rajsuvariya.wikisearch.injection.module.ApplicationModule;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(IfaApp app);
+    void inject(WikiSearchApp app);
 
     @ApplicationContext
     Context context();

@@ -15,4 +15,9 @@ public interface WikiSearchMvpView extends MvpView {
     void openMainActivity();
 
     void showSearchResults(ArrayList<Page> pages);
+
+    void showNoResultAvailable();
+
+    void setUpSearchLabel();
+
 }

@@ -2,8 +2,6 @@
 
 package io.rajsuvariya.wikisearch.ui.wikiSearch;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -36,36 +34,60 @@ public class WikiSearchPresenter<V extends WikiSearchMvpView> extends BasePresen
     }
 
     @Override
-    public void onSearchTextChanged(Observable<String> queryObservable) {
-        getCompositeDisposable().add(queryObservable
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .filter(new Predicate<String>() {
-                    @Override
-                    public boolean test(String text) throws Exception {
-                        return !text.isEmpty();
-                    }
-                })
-                .distinctUntilChanged()
-                .switchMap(new Function<String, Observable<WikiSearchOutputModel>>() {
-                    @Override
-                    public Observable<WikiSearchOutputModel> apply(String query) throws Exception {
-                        return callWikiApi(query);
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<WikiSearchOutputModel>() {
-                    @Override
-                    public void accept(WikiSearchOutputModel outputModel) throws Exception {
-                        getMvpView().showSearchResults((ArrayList<Page>) outputModel.getQuery().getPages());
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.wtf("WikiSearchPresenter", throwable);
-                    }
-                })
-        );
+    public void onSearchTextChanged(Observable<String> queryObservable, String networkError) {
+        if (getMvpView().isNetworkConnected()) {
+            getCompositeDisposable().add(queryObservable
+                    .debounce(500, TimeUnit.MILLISECONDS)
+                    .filter(new Predicate<String>() {
+                        @Override
+                        public boolean test(String text) throws Exception {
+                            if (text.isEmpty()) {
+                                getMvpView().setUpSearchLabel();
+                            }
+                            return !text.isEmpty();
+                        }
+                    })
+                    .distinctUntilChanged()
+                    .doOnNext(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+                            getMvpView().showLoading();
+                        }
+                    })
+                    .switchMap(new Function<String, Observable<WikiSearchOutputModel>>() {
+                        @Override
+                        public Observable<WikiSearchOutputModel> apply(String query) throws Exception {
+                            return callWikiApi(query)
+                                    .onErrorResumeNext(Observable.<WikiSearchOutputModel>empty());
+                        }
+                    })
+                    .doOnNext(new Consumer<WikiSearchOutputModel>() {
+                        @Override
+                        public void accept(WikiSearchOutputModel outputModel) throws Exception {
+                            getMvpView().hideLoading();
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<WikiSearchOutputModel>() {
+                        @Override
+                        public void accept(WikiSearchOutputModel outputModel) throws Exception {
+                            if (outputModel.getQuery() != null && outputModel.getQuery().getPages().size() > 0) {
+                                getMvpView().showSearchResults((ArrayList<Page>) outputModel.getQuery().getPages());
+                            } else {
+                                getMvpView().showNoResultAvailable();
+                            }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            getMvpView().showToast(throwable.getMessage());
+                        }
+                    })
+            );
+        } else {
+            getMvpView().showToast(networkError);
+        }
     }
 
     private Observable<WikiSearchOutputModel> callWikiApi(String queryParam) {
